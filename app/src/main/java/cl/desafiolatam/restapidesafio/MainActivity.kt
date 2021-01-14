@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import cl.desafiolatam.restapidesafio.data.UserAdapter
+import cl.desafiolatam.restapidesafio.databinding.ActivityMainBinding
 import cl.desafiolatam.restapidesafio.model.RestViewModel
 
 /*
@@ -24,12 +27,17 @@ recyclerview y UserAdapter.
  */
 class MainActivity : AppCompatActivity() {
     private val viewModel : RestViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding= ActivityMainBinding.inflate(layoutInflater)
+        val adapter = UserAdapter()
+        binding.rvUsers.adapter=adapter
+        binding.rvUsers.layoutManager=LinearLayoutManager(this)
+        setContentView(binding.root)
         viewModel.listaUsuarios().observe(this,{
-            Log.d("prueba", "DATOS $it ")
+            adapter.update(it)
 
         })
 
